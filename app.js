@@ -7,10 +7,11 @@ import ejsMate from "ejs-mate";
 import methodOverride from "method-override";
 import wrapAsync from "./utils/wrapAsync.js";
 import ExpressError from "./utils/ExpressError.js";
+import listingSchema from "./schema.js"
 import dotenv from "dotenv"
 dotenv.config()
 
-const port = process.env.port;
+const port = process.env.PORT || 3000;
 
 
 
@@ -51,9 +52,10 @@ app.get("/listings/new", (req, res) => {
 
 // Create Route
 app.post("/listings", wrapAsync(async (req, res) => {
-    if(!req.body.listen){
-        throw new ExpressError(400, "Send valid data for listing")
-    }
+   const { error } = listingSchema.validate(req.body);
+if (error) {
+    throw new ExpressError(400, error.details[0].message);
+}
     const newListing = new Listing(req.body.listing)
     await newListing.save();
     res.redirect("/listings")
@@ -75,7 +77,7 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 
 //  Update Route
 app.put("/listings/:id", wrapAsync(async (req, res) => {
-    if(!req.body.listen){
+    if(!req.body.listing){
         throw new ExpressError(400, "Send valid data for listing")
     }
     let { id } = req.params;
@@ -96,9 +98,12 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     })
 
 app.use((err, req, res, next) => {
-    let { statusCode=500, message= "Something went wrong!"} = err;
-    res.status(statusCode).send(message);
-})
+    let { statusCode = 500, message = "Something went wrong!" } = err;
+    res.status(statusCode).render("listings/error.ejs", { 
+        statusCode, 
+        message 
+    });
+});
 
 app.get("/", (req, res) => {
     res.send(`I'm root`)

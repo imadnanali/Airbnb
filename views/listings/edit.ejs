@@ -18,7 +18,7 @@
                 <br>
                 <div>
                     <label for="img-link" class="form-label">Image</label>
-                    <input name="listing[image][url]" required class="form-control" value="<%= listing.image.url %>">
+                    <input name="listing[image]" class="form-control" value="<%= listing.image ? listing.image : '' %>">
                     <div class="invalid-feedback">Image please.</div>
                 </div>
                 <br>

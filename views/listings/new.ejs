@@ -1,63 +1,63 @@
 <% layout ("/layouts/boilerplate")%>
 
-    <div class="row">
-        <div class="col-8">
-            <h3>Create a new Listing</h3>
-            <form method="POST" action="/listings" novalidate class="needs-validation">
-                <div>
-                    <label for="title" class="form-label">Title</label>
-                    <input type="text" required name="listing[title]" placeholder="Enter Title" class="form-control">
-                    <div class="valid-feedback">Title looks good!</div>
-                    <div class="invalid-feedback">Enter a valid title</div>
-                    <br>
-                </div>
+<div class="row">
+    <div class="col-8">
+        <h3>Create a new Listing</h3>
+        <form method="POST" action="/listings" novalidate class="needs-validation">
+            <div>
+                <label for="title" class="form-label">Title</label>
+                <input type="text" required name="listing[title]" placeholder="Enter Title" class="form-control">
+                <div class="valid-feedback">Title looks good!</div>
+                <div class="invalid-feedback">Enter a valid title</div>
                 <br>
-                <div>
-                    <label for="description" class="form-label">Description</label>
-                    <textarea type="text" required name="listing[description]" placeholder="Enter description"
-                        class="form-control"></textarea>
-                         <div class="valid-feedback">Woww!</div>
-                    <div class="invalid-feedback">Please enter a short description.</div>
-                </div>
-                <br>
-                <br>
-                <div class="row">
-                    <div class="col-4">
-                        <label for="price" class="form-label">Price</label>
-                        <input type="number" required name="listing[price]" placeholder="Enter Price"
-                            class="form-control">
-                        <div class="invalid-feedback">Please enter a valid price.</div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="col-8">
-                        <label for="location" class="form-label">Location</label>
-                        <input type="text" required name="listing[location]" placeholder="Enter location"
-                            class="form-control">
-                             <div class="valid-feedback">Nice location</div>
-                        <div class="invalid-feedback">Please enter a valid location.</div>
-                    </div>
-
+            </div>
+            <br>
+            <div>
+                <label for="description" class="form-label">Description</label>
+                <textarea type="text" required name="listing[description]" placeholder="Enter description"
+                    class="form-control"></textarea>
+                     <div class="valid-feedback">Woww!</div>
+                <div class="invalid-feedback">Please enter a short description.</div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-4">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" required name="listing[price]" placeholder="Enter Price"
+                        class="form-control" min="0">
+                    <div class="invalid-feedback">Please enter a valid price.</div>
                 </div>
                 <br>
                 <br>
-                <div>
-                    <label for="img" class="form-label">Image</label>
-                    <input type="text" required name="listing[image][url]" placeholder="Image URL/Link"
+                <div class="col-8">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" required name="listing[location]" placeholder="Enter location"
                         class="form-control">
-                    <div class="invalid-feedback">Image please.</div>
+                         <div class="valid-feedback">Nice location</div>
+                    <div class="invalid-feedback">Please enter a valid location.</div>
                 </div>
-                <br>
-                <br>
-                <div>
-                    <label for="country" class="form-label">Country</label>
-                    <input type="text" required name="listing[country]" placeholder="Enter country name"
-                        class="form-control">
-                    <div class="invalid-feedback">Please enter a valid country name.</div>
-                </div>
-                <br>
-                <br>
-                <button class="btn btn-dark">Add</button>
-            </form>
-        </div>
+            </div>
+            <br>
+            <br>
+            <div>
+                <label for="img" class="form-label">Image URL (optional)</label>
+                <input type="url" name="listing[image]" placeholder="Enter image URL (leave empty for default)"
+                    class="form-control">
+                <small class="text-muted">Leave empty to use default image</small>
+                <div class="invalid-feedback">Please enter a valid image URL</div>
+            </div>
+            <br>
+            <br>
+            <div>
+                <label for="country" class="form-label">Country</label>
+                <input type="text" required name="listing[country]" placeholder="Enter country name"
+                    class="form-control">
+                <div class="invalid-feedback">Please enter a valid country name.</div>
+            </div>
+            <br>
+            <br>
+            <button class="btn btn-dark">Add</button>
+        </form>
     </div>
+</div>
