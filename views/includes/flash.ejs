@@ -1,0 +1,47 @@
+<!-- Flash Messages Container -->
+<div class="flash-container position-fixed top-0 start-50 translate-middle-x mt-3" 
+     style="z-index: 1050; width: 90%; max-width: 500px;">
+     
+    <% if (success && success.length) { %>
+        <div class="alert alert-success alert-dismissible fade show shadow-lg auto-dismiss" 
+             role="alert" data-dismiss-delay="5000">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle me-3 fs-5"></i>
+                <div class="flex-grow-1">
+                    <strong>Success!</strong> <%= success %>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    <% } %>
+    
+    <% if (error && error.length) { %>
+        <div class="alert alert-danger alert-dismissible fade show shadow-lg auto-dismiss" 
+        role="alert" data-dismiss-delay="5000">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-circle me-3 fs-5"></i>
+            <div class="flex-grow-1">
+                <strong>Error!</strong> <%= error %>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<!-- Bootstrap JS (must be included for dismissible alerts to work) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Auto-dismiss alerts after delay
+  document.addEventListener('DOMContentLoaded', function () {
+    const alerts = document.querySelectorAll('.auto-dismiss');
+    alerts.forEach(alert => {
+      const delay = alert.getAttribute('data-dismiss-delay') || 5000;
+      setTimeout(() => {
+        const bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close();
+      }, delay);
+    });
+  });
+</script>

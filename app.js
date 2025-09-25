@@ -1,14 +1,15 @@
 import express from "express";
 import mongoose from "mongoose"
-import Listing from "./models/listing.js";
 import { fileURLToPath } from "url";
 import path from "path";
 import ejsMate from "ejs-mate";
 import methodOverride from "method-override";
-import wrapAsync from "./utils/wrapAsync.js";
 import ExpressError from "./utils/ExpressError.js";
-import { listingSchema, reviewSchema } from "./schema.js";
 import dotenv from "dotenv";
+import session from "express-session";
+import flash from "connect-flash";
+
+
 dotenv.config();
 
 import listings from "./routes/listing.js";
@@ -43,6 +44,30 @@ main().then(res => {
 async function main() {
     await mongoose.connect(MONGO_URL);
 };
+
+
+
+
+const sessionOption = {
+    secret: "mysupersecretcode",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    }
+}
+
+app.use(session(sessionOption));
+app.use(flash());
+
+
+app.use((req, res, next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next()
+})
 
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
