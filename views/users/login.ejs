@@ -1,0 +1,143 @@
+<% layout ("/layouts/boilerplate")%>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <!-- Header Section -->
+            <div class="text-center mb-5">
+                <div class="airbnb-logo mb-3">
+                    <i class="fab fa-airbnb fa-3x" style="color: #22303e;"></i>
+                </div>
+                <h1 class="h2 fw-bold" style="color: #22303e;">Welcome back</h1>
+                <p class="text-muted">Sign in to your Airbnb account</p>
+            </div>
+
+         
+
+            <!-- Login Form Card -->
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4 p-md-5">
+                    <form action="/login" method="POST" class="needs-validation" novalidate>
+                        <!-- Username Field -->
+                        <div class="mb-4">
+                            <label for="username" class="form-label fw-semibold" style="color: #22303e;">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #f8f9fa; border-color: #22303e; border-right: none;">
+                                    <i class="fas fa-user" style="color: #22303e;"></i>
+                                </span>
+                                <input type="text" 
+                                       name="username" 
+                                       class="form-control" 
+                                       id="username" 
+                                       placeholder="Enter your username" 
+                                       required
+                                       value="<%= locals.body && locals.body.username ? locals.body.username : '' %>"
+                                       style="border-color: #22303e; border-left: none;">
+                                <div class="valid-feedback">Looks good!</div>
+                                <div class="invalid-feedback">Please enter your username.</div>
+                            </div>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-semibold" style="color: #22303e;">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #f8f9fa; border-color: #22303e; border-right: none;">
+                                    <i class="fas fa-lock" style="color: #22303e;"></i>
+                                </span>
+                                <input type="password" 
+                                       name="password" 
+                                       class="form-control" 
+                                       id="password" 
+                                       placeholder="Enter your password" 
+                                       required
+                                       style="border-color: #22303e; border-left: none; border-right: none;">
+                                <button type="button" class="btn btn-outline-secondary" id="togglePassword" style="border-color: #22303e; border-left: none;">
+                                    <i class="fas fa-eye" style="color: #22303e;"></i>
+                                </button>
+                                <div class="valid-feedback">Looks good!</div>
+                                <div class="invalid-feedback">Please enter your password.</div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-lg fw-semibold py-3" style="background-color: #22303e; color: white; border: none;">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                            </button>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="text-center mb-3">
+                            <span class="text-muted">New to Airbnb?</span>
+                        </div>
+
+                        <!-- Signup Link -->
+                        <div class="d-grid">
+                            <a href="/signup" class="btn btn-outline-secondary btn-lg py-3 fw-semibold" style="border-color: #22303e; color: #22303e;">
+                                <i class="fas fa-user-plus me-2"></i>Create New Account
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 2px solid #22303e;
+    }
+    
+    .btn {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        background-color: #1a2530 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(34, 48, 62, 0.3);
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #22303e !important;
+        color: white !important;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #22303e !important;
+        box-shadow: 0 0 0 0.2rem rgba(34, 48, 62, 0.25);
+    }
+    
+    .input-group-text {
+        border-radius: 8px 0 0 8px;
+        background: #f8f9fa;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye" style="color: #22303e;"></i>' : '<i class="fas fa-eye-slash" style="color: #22303e;"></i>';
+            });
+        }
+    });
+</script>

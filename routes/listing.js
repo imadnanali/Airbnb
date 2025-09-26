@@ -3,6 +3,8 @@ import { listingSchema } from "../schema.js";
 import wrapAsync from "../utils/wrapAsync.js";
 import ExpressError from "../utils/ExpressError.js";
 import Listing from "../models/listing.js";
+import isLoggedin from "../middleware.js";
+
 
 
 const router = express.Router();
@@ -29,12 +31,12 @@ router.get("/", wrapAsync(async (req, res) => {
 
 
 // New Route
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedin, (req, res) => {
     res.render("listings/new.ejs");
 });
 
 // Create Route
-router.post("/", validationListing, wrapAsync(async (req, res) => {
+router.post("/", isLoggedin, validationListing, wrapAsync(async (req, res) => {
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     req.flash("success", "New Listing Created");
@@ -53,7 +55,7 @@ router.get("/:id", wrapAsync(async (req, res) => {
 }));
 
 // Edit Route
-router.get("/:id/edit", wrapAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedin,  wrapAsync(async (req, res) => {
     let { id } = req.params;
     let listing = await Listing.findById(id);if (!listing) {
         req.flash("error", "Listing you requested does not exist!");
@@ -63,7 +65,7 @@ router.get("/:id/edit", wrapAsync(async (req, res) => {
 }));
 
 //  Update Route
-router.put("/:id", validationListing, wrapAsync(async (req, res) => {
+router.put("/:id", isLoggedin, validationListing, wrapAsync(async (req, res) => {
     if (!req.body.listing) {
         throw new ExpressError(400, "Send valid data for listing");
     }
@@ -74,7 +76,7 @@ router.put("/:id", validationListing, wrapAsync(async (req, res) => {
 }));
 
 // Delete Route
-router.delete("/:id", wrapAsync(async (req, res) => {
+router.delete("/:id", isLoggedin, wrapAsync(async (req, res) => {
     let { id } = req.params;
     let listing = await Listing.findByIdAndDelete(id);
     // console.log(listing);

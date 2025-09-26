@@ -1,0 +1,361 @@
+<% layout ("/layouts/boilerplate")%>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <!-- Header Section -->
+            <div class="text-center mb-5">
+                <div class="airbnb-logo mb-3">
+                    <i class="fab fa-airbnb fa-3x" style="color: #22303e;"></i>
+                </div>
+                <h1 class="h2 fw-bold" style="color: #22303e;">Create your account</h1>
+                <p class="text-muted">Join thousands of travelers and hosts worldwide</p>
+            </div>
+
+            <!-- Signup Form Card -->
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4 p-md-5">
+                    <form action="/signup" method="POST" class="needs-validation" novalidate>
+                        <!-- Username Field -->
+                        <div class="mb-4">
+                            <label for="username" class="form-label fw-semibold" style="color: #22303e;">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #f8f9fa; border-color: #22303e; border-right: none;">
+                                    <i class="fas fa-user" style="color: #22303e;"></i>
+                                </span>
+                                <input type="text" 
+                                       name="username" 
+                                       class="form-control" 
+                                       id="username" 
+                                       placeholder="Enter your username" 
+                                       required
+                                       minlength="3"
+                                       style="border-color: #22303e; border-left: none;">
+                                <div class="valid-feedback">Looks good!</div>
+                                <div class="invalid-feedback">Please choose a username (min. 3 characters).</div>
+                            </div>
+                        </div>
+
+                        <!-- Email Field -->
+                        <div class="mb-4">
+                            <label for="email" class="form-label fw-semibold" style="color: #22303e;">Email address</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #f8f9fa; border-color: #22303e; border-right: none;">
+                                    <i class="fas fa-envelope" style="color: #22303e;"></i>
+                                </span>
+                                <input type="email" 
+                                       name="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       placeholder="your@email.com" 
+                                       required
+                                       style="border-color: #22303e; border-left: none;">
+                                <div class="valid-feedback">Valid email!</div>
+                                <div class="invalid-feedback">Please provide a valid email address.</div>
+                            </div>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-semibold" style="color: #22303e;">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #f8f9fa; border-color: #22303e; border-right: none;">
+                                    <i class="fas fa-lock" style="color: #22303e;"></i>
+                                </span>
+                                <input type="password" 
+                                       name="password" 
+                                       class="form-control" 
+                                       id="password" 
+                                       placeholder="Create a strong password" 
+                                       required
+                                       minlength="6"
+                                       style="border-color: #22303e; border-left: none; border-right: none;">
+                                <button type="button" class="btn btn-outline-secondary" id="togglePassword" style="border-color: #22303e; border-left: none;">
+                                    <i class="fas fa-eye" style="color: #22303e;"></i>
+                                </button>
+                                <div class="valid-feedback">Strong password!</div>
+                                <div class="invalid-feedback">Password must be at least 6 characters long.</div>
+                            </div>
+                            <div class="password-strength mt-2">
+                                <div class="progress" style="height: 4px; background-color: #f0f0f0;">
+                                    <div class="progress-bar" id="passwordStrength" style="width: 0%; background-color: #22303e;"></div>
+                                </div>
+                                <small class="text-muted" id="passwordHint">Password strength</small>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div class="mb-4">
+                            <label for="confirmPassword" class="form-label fw-semibold" style="color: #22303e;">Confirm Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: #f8f9fa; border-color: #22303e; border-right: none;">
+                                    <i class="fas fa-lock" style="color: #22303e;"></i>
+                                </span>
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="confirmPassword" 
+                                       placeholder="Re-enter your password" 
+                                       required
+                                       style="border-color: #22303e; border-left: none; border-right: none;">
+                                <button type="button" class="btn btn-outline-secondary" id="toggleConfirmPassword" style="border-color: #22303e; border-left: none;">
+                                    <i class="fas fa-eye" style="color: #22303e;"></i>
+                                </button>
+                                <div class="valid-feedback">Passwords match!</div>
+                                <div class="invalid-feedback" id="confirmPasswordFeedback">Passwords do not match.</div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms" required style="border-color: #22303e;">
+                                <label class="form-check-label small text-muted" for="terms">
+                                    I agree to the <a href="#" class="text-decoration-none" style="color: #22303e;">Terms of Service</a> 
+                                    and <a href="#" class="text-decoration-none" style="color: #22303e;">Privacy Policy</a>
+                                </label>
+                                <div class="invalid-feedback">You must agree before submitting.</div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-lg fw-semibold py-3" style="background-color: #22303e; color: white; border: none;">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </button>
+                        </div>
+
+                        <!-- Login Link -->
+                        <div class="text-center">
+                            <p class="mb-0">Already have an account? 
+                                <a href="/login" class="text-decoration-none fw-semibold" style="color: #22303e;">Log in</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Security Features -->
+            <div class="text-center mt-4">
+                <div class="row">
+                    <div class="col-12">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Your information is protected by SSL encryption
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 2px solid #22303e;
+    }
+    
+    .btn {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        background-color: #1a2530 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(34, 48, 62, 0.3);
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #22303e !important;
+        box-shadow: 0 0 0 0.2rem rgba(34, 48, 62, 0.25);
+    }
+    
+    .input-group-text {
+        border-radius: 8px 0 0 8px;
+        background: #f8f9fa;
+    }
+    
+    .airbnb-logo {
+        animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-10px);
+        }
+        60% {
+            transform: translateY(-5px);
+        }
+    }
+    
+    .password-strength .progress {
+        border-radius: 2px;
+    }
+    
+    .progress-bar {
+        transition: width 0.3s ease;
+    }
+    
+    /* Custom focus states */
+    .form-check-input:focus {
+        border-color: #22303e;
+        box-shadow: 0 0 0 0.2rem rgba(34, 48, 62, 0.25);
+    }
+    
+    .form-check-input:checked {
+        background-color: #22303e;
+        border-color: #22303e;
+    }
+    
+    /* Button outline hover effect */
+    .btn-outline-secondary:hover {
+        background-color: #22303e;
+        border-color: #22303e;
+    }
+    
+    .btn-outline-secondary:hover i {
+        color: white !important;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Password visibility toggle
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        
+        // Toggle main password visibility
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye" style="color: #22303e;"></i>' : '<i class="fas fa-eye-slash" style="color: #22303e;"></i>';
+            });
+        }
+        
+        // Toggle confirm password visibility
+        if (toggleConfirmPassword && confirmPasswordInput) {
+            toggleConfirmPassword.addEventListener('click', function() {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye" style="color: #22303e;"></i>' : '<i class="fas fa-eye-slash" style="color: #22303e;"></i>';
+            });
+        }
+        
+        // Password strength indicator
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('passwordStrength');
+            const strengthHint = document.getElementById('passwordHint');
+            
+            let strength = 0;
+            let hint = 'Very weak';
+            let color = '#dc3545';
+            
+            if (password.length >= 6) strength += 25;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 25;
+            if (password.match(/\d/)) strength += 25;
+            if (password.match(/[^a-zA-Z\d]/)) strength += 25;
+            
+            if (strength >= 75) {
+                hint = 'Strong';
+                color = '#22303e';
+            } else if (strength >= 50) {
+                hint = 'Medium';
+                color = '#ffc107';
+            } else if (strength >= 25) {
+                hint = 'Weak';
+                color = '#fd7e14';
+            }
+            
+            strengthBar.style.width = strength + '%';
+            strengthBar.style.backgroundColor = color;
+            strengthHint.textContent = hint + ' password';
+            strengthHint.style.color = color;
+            
+            // Check password match
+            checkPasswordMatch();
+        });
+        
+        // Confirm password validation
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+        
+        function checkPasswordMatch() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const feedback = document.getElementById('confirmPasswordFeedback');
+            
+            if (confirmPassword === '') {
+                confirmPasswordInput.classList.remove('is-valid', 'is-invalid');
+                confirmPasswordInput.style.borderColor = '#22303e';
+                return;
+            }
+            
+            if (password === confirmPassword && password !== '') {
+                confirmPasswordInput.classList.add('is-valid');
+                confirmPasswordInput.classList.remove('is-invalid');
+                confirmPasswordInput.style.borderColor = '#198754';
+                feedback.textContent = 'Passwords match!';
+            } else {
+                confirmPasswordInput.classList.add('is-invalid');
+                confirmPasswordInput.classList.remove('is-valid');
+                confirmPasswordInput.style.borderColor = '#dc3545';
+                feedback.textContent = 'Passwords do not match.';
+            }
+        }
+        
+        // Form validation
+        const form = document.querySelector('.needs-validation');
+        form.addEventListener('submit', function(event) {
+            // Check password match before submission
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                event.stopPropagation();
+                confirmPasswordInput.classList.add('is-invalid');
+            }
+            
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            form.classList.add('was-validated');
+        });
+        
+        // Real-time validation as user types
+        const inputs = form.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.checkValidity()) {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                    if (this.type !== 'password' || this.id === 'confirmPassword') {
+                        this.style.borderColor = '#198754';
+                    }
+                } else {
+                    this.classList.remove('is-valid');
+                    this.classList.add('is-invalid');
+                    this.style.borderColor = '#dc3545';
+                }
+            });
+        });
+    });
+</script>
