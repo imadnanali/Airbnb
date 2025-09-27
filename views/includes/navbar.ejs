@@ -147,13 +147,11 @@
               <i class="fa-solid fa-map-location-dot"></i>All Listings
             </a>
           </li>
-          <% if(curruser) { %>
           <li class="nav-item">
             <a class="nav-link" href="/listings/new">
               <i class="fa-solid fa-circle-plus"></i>New Listing
             </a>
           </li>
-          <% } %>
         </ul>
 
         <!-- User Authentication Section -->
@@ -179,7 +177,7 @@
             </li>
             <li class="nav-item">
              <a href="/logout" class="d-inline" style="text-decoration: none; ">
-                <button type="submit" class="nav-link btn btn-link p-2 border-0" 
+                <button onclick="return confirm('Are you sure you want to logout?')" type="submit" class="nav-link btn btn-link p-2 border-0" 
                         style="color: inherit; text-decoration: none;">
                   <i class="fa-solid fa-right-from-bracket"></i>Logout 
                 </button>

@@ -1,24 +1,25 @@
-import mongoose from "mongoose";
-import Listing from "../models/listing.js";
 import { data } from "./data.js";
+import Listing from "../models/listing.js";
+import mongoose from "mongoose";
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/airbnb";
 
-main().then(res => {
-    console.log("Connect to DB")
-}).catch(err => {
-    console.log(err);
-})
-
 async function main() {
-    await mongoose.connect(MONGO_URL)
+    await mongoose.connect(MONGO_URL);
 }
 
-
-const initDB = async ()=>{
+const initDB = async () => {
+    await main();
     await Listing.deleteMany({});
-    await Listing.insertMany(data);
-    console.log(`Data saved`);
-}
+    
+    // Add owner ID to each listing
+    const listingsWithOwner = data.map(listing => ({
+        ...listing,
+        owner: "68d7bdc48290fa24c45d427d"
+    }));
+    
+    await Listing.insertMany(listingsWithOwner);
+    console.log("Data was initialized");
+};
 
 initDB();
