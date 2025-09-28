@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
-import Review from "./review.js";
+import Review from "./review.schema.js";
 
 const listingSchema = new Schema({
     title: {

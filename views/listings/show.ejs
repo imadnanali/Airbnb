@@ -133,7 +133,7 @@
                                             </div>
                                             <% if (curruser && review.author && review.author.equals(curruser._id)) { %>
                                                 <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <button type="submit" onclick="return confirm('Are you sure you want to delete your review?')"  class="btn btn-sm btn-outline-danger">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -168,7 +168,7 @@
                                 </a>
 
                                 <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
-                                    <button class="btn btn-outline-danger px-4">
+                                    <button class="btn btn-outline-danger px-4" onclick="return confirm('Are you sure you want to delete your listing')">
                                         <i class="fas fa-trash me-2"></i>Delete
                                     </button>
                                 </form>

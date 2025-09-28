@@ -10,14 +10,14 @@ import session from "express-session";
 import flash from "connect-flash";
 import passport from "passport"
 import LocalStrategy from "passport-local"
-import User from "./models/user.js";
+import User from "./models/user.schema.js";
 
 
 dotenv.config();
 
-import listingRouter from "./routes/listing.js";
-import reviewsRouter from "./routes/review.js";
-import userRouter from "./routes/user.js";
+import listingRouter from "./routes/listing.route.js";
+import reviewsRouter from "./routes/review.route.js";
+import userRouter from "./routes/user.route.js";
 
 
 const port = process.env.PORT || 3000;
