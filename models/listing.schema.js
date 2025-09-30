@@ -12,35 +12,8 @@ const listingSchema = new Schema({
         required: true
     },
     image: {
-        type: Schema.Types.Mixed, // Change to Mixed to accept both string and object
-        default: "https://images.unsplash.com/photo-1586810724476-c294fb7ac01b?q=80&w=436&auto=format&fit=crop&ixlib=rb-4.1.0",
-        validate: {
-            validator: function (v) {
-                if (!v || v === "") return true;
-
-                // Handle both string and object formats
-                if (typeof v === 'string') {
-                    try {
-                        new URL(v);
-                        return true;
-                    } catch (e) {
-                        return false;
-                    }
-                }
-
-                if (typeof v === 'object' && v.url) {
-                    try {
-                        new URL(v.url);
-                        return true;
-                    } catch (e) {
-                        return false;
-                    }
-                }
-
-                return false;
-            },
-            message: "Please provide a valid image URL or object with url property"
-        }
+        url: String,
+        file: String
     },
     price: {
         type: Number,

@@ -73,22 +73,22 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req, res, next) => {
-    // Set current page for active nav highlighting
-    const path = req.path;
-    if (path === '/') {
-        res.locals.currentPage = 'home';
-    } else if (path === '/listings') {
-        res.locals.currentPage = 'listings';
-    } else if (path === '/listings/new') {
-        res.locals.currentPage = 'new';
-    } else if (path.startsWith('/listings/') && path.endsWith('/edit')) {
-        res.locals.currentPage = 'edit';
-    } else if (path.startsWith('/listings/')) {
-        res.locals.currentPage = 'show';
-    }
-    next();
-});
+// app.use((req, res, next) => {
+//     // Set current page for active nav highlighting
+//     const path = req.path;
+//     if (path === '/') {
+//         res.locals.currentPage = 'home';
+//     } else if (path === '/listings') {
+//         res.locals.currentPage = 'listings';
+//     } else if (path === '/listings/new') {
+//         res.locals.currentPage = 'new';
+//     } else if (path.startsWith('/listings/') && path.endsWith('/edit')) {
+//         res.locals.currentPage = 'edit';
+//     } else if (path.startsWith('/listings/')) {
+//         res.locals.currentPage = 'show';
+//     }
+//     next();
+// });
 
 app.use((req, res, next) => {
   res.locals.currentPage = req.path; // gives you the URL like "/", "/listings", etc.
@@ -118,17 +118,17 @@ app.use("/", userRouter);
 
 //Review 
 
-app.use((req, res, next) => {
-    next(new ExpressError(404, "Page Not Found"));
-});
+// app.use((req, res, next) => {
+//     next(new ExpressError(404, "Page Not Found"));
+// });
 
-app.use((err, req, res, next) => {
-    let { statusCode = 500, message = "Something went wrong!" } = err;
-    res.status(statusCode).render("listings/error.ejs", {
-        statusCode,
-        message
-    });
-});
+// app.use((err, req, res, next) => {
+//     let { statusCode = 500, message = "Something went wrong!" } = err;
+//     res.status(statusCode).render("listings/error.ejs", {
+//         statusCode,
+//         message
+//     });
+// });
 
 app.get("/", (req, res) => {
     res.send(`I'm root`);

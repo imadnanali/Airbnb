@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-8">
         <h3>Create a new Listing</h3>
-        <form method="POST" action="/listings" novalidate class="needs-validation">
+        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
             <div>
                 <label for="title" class="form-label">Title</label>
                 <input type="text" required name="listing[title]" placeholder="Enter Title" class="form-control">
@@ -42,8 +42,7 @@
             <br>
             <div>
                 <label for="img" class="form-label">Image URL (optional)</label>
-                <input type="url" name="listing[image]" placeholder="Enter image URL (leave empty for default)"
-                    class="form-control">
+                <input type="file" name="listing[image]" class="form-control">
                 <small class="text-muted">Leave empty to use default image</small>
                 <div class="invalid-feedback">Please enter a valid image URL</div>
             </div>
