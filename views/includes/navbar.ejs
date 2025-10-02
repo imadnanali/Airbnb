@@ -77,6 +77,58 @@
       transform: scale(1.2);
     }
 
+    /* Search Bar Styles */
+    .search-container {
+      flex: 0 1 500px;
+      max-width: 500px;
+      margin: 0 2rem;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      border-radius: 25px;
+      padding: 0.6rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .search-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .search-btn {
+      background: linear-gradient(135deg, #00a699, #008489);
+      border: none;
+      border-radius: 25px;
+      padding: 0.6rem 1.5rem;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover {
+      background: linear-gradient(135deg, #008489, #00a699);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
     .nav-divider {
       width: 1px;
       height: 30px;
@@ -103,7 +155,26 @@
       margin-left: 0.5rem;
     }
 
+    @media (max-width: 1199.98px) {
+      .search-container {
+        flex: 0 1 400px;
+        max-width: 400px;
+        margin: 0 1rem;
+      }
+    }
+
     @media (max-width: 991.98px) {
+      .search-container {
+        order: 3;
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin: 1rem 0 0 0;
+      }
+
+      .search-form {
+        width: 100%;
+      }
+
       .navbar-nav .nav-item {
         margin: 0.2rem 0;
       }
@@ -116,6 +187,25 @@
         margin: 0.1rem 0;
         justify-content: center;
       }
+
+      .navbar-collapse {
+        padding-bottom: 1rem;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .search-btn span {
+        display: none;
+      }
+      
+      .search-btn {
+        padding: 0.6rem;
+      }
+      
+      .search-btn::after {
+        content: "🔍";
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
@@ -124,10 +214,22 @@
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="/">
+      <a class="navbar-brand" href="/listings">
         <i class="fa-solid fa-compass me-2"></i>
         Explore
       </a>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <form class="search-form" action="/listings/search" method="GET">
+          <input type="text" name="q" class="search-input" placeholder="Search destinations, locations..." 
+                 value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+          <button type="submit" class="search-btn">
+            <i class="fa-solid fa-search me-1"></i>
+            <span>Search</span>
+          </button>
+        </form>
+      </div>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
         aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -135,27 +237,13 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarContent">
-        <!-- Main Navigation Links -->
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <i class="fa-solid fa-home"></i>Home
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/listings">
-              <i class="fa-solid fa-map-location-dot"></i>All Listings
-            </a>
-          </li>
+        <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item">
             <a class="nav-link" href="/listings/new">
               <i class="fa-solid fa-circle-plus"></i>New Listing
             </a>
           </li>
-        </ul>
-
-        <!-- User Authentication Section -->
-        <ul class="navbar-nav ms-auto align-items-center">
+          
           <% if(!curruser) { %>
             <!-- User not logged in -->
             <li class="nav-item">
@@ -202,6 +290,36 @@
           link.classList.add('active');
         }
       });
+
+      // Focus search input on '/' key press
+      document.addEventListener('keydown', function(e) {
+        if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          const searchInput = document.querySelector('.search-input');
+          if (searchInput) {
+            searchInput.focus();
+          }
+        }
+      });
+
+      // Show search shortcut hint
+      const searchInput = document.querySelector('.search-input');
+      if (searchInput) {
+        searchInput.addEventListener('focus', function() {
+          this.setAttribute('placeholder', 'Press Esc to cancel');
+        });
+        
+        searchInput.addEventListener('blur', function() {
+          this.setAttribute('placeholder', 'Search destinations, locations...');
+        });
+
+        // Escape key to blur search
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            this.blur();
+          }
+        });
+      }
     });
   </script>
 </body>

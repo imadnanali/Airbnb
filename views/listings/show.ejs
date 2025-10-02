@@ -121,14 +121,16 @@
                                             <div class="d-flex align-items-center">
                                                 <strong class="text-dark me-2"><%= review.author? review.author.username : 'Anonymous' %></strong>
                                                 <small class="text-muted">
-                                                    <% for (let i = 1; i <= 5; i++) { %>
-                                                        <% if (i <= review.rating) { %>
-                                                            <i class="fas fa-star text-warning"></i>
-                                                        <% } else { %>
-                                                            <i class="far fa-star text-warning"></i>
+                                                    <div class="star-rating-display">
+                                                        <% for (let i = 1; i <= 5; i++) { %>
+                                                            <% if (i <= review.rating) { %>
+                                                                <i class="fas fa-star text-warning"></i>
+                                                            <% } else { %>
+                                                                <i class="far fa-star text-warning"></i>
+                                                            <% } %>
                                                         <% } %>
-                                                    <% } %>
-                                                    <span class="ms-1">(<%= review.rating %>.0)</span>
+                                                        <span class="ms-1">(<%= review.rating %>.0)</span>
+                                                    </div>
                                                 </small>
                                             </div>
                                             <% if (curruser && review.author && review.author.equals(curruser._id)) { %>
@@ -194,27 +196,34 @@
                 <h5 class="modal-title" id="reviewModalLabel">Write a Review</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="/listings/<%= listing._id %>/reviews">
+            <form method="POST" action="/listings/<%= listing._id %>/reviews" id="reviewForm">
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="rating" class="form-label">Rating</label>
-                        <div class="rating-stars">
-                            <!-- Fixed: Reversed the order to fix star rating -->
-                            <% for (let i = 5; i >= 1; i--) { %>
-                                <input type="radio" id="star<%= i %>" name="review[rating]" value="<%= i %>" required>
-                                <label for="star<%= i %>" class="star-label"><i class="fas fa-star"></i></label>
-                            <% } %>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Rating</label>
+                        <div class="rating-container">
+                            <div class="rating-stars" id="starRating">
+                                <% for (let i = 1; i <= 5; i++) { %>
+                                    <input type="radio" id="star<%= i %>" name="review[rating]" value="<%= i %>" class="star-input">
+                                    <label for="star<%= i %>" class="star-label">
+                                        <i class="far fa-star"></i>
+                                        <span class="star-number"><%= i %></span>
+                                    </label>
+                                <% } %>
+                            </div>
+                            <div class="rating-text text-center mt-2">
+                                <small class="text-muted" id="ratingText">Select your rating</small>
+                            </div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="comment" class="form-label">Comment</label>
+                        <label for="comment" class="form-label fw-bold">Comment</label>
                         <textarea class="form-control" id="comment" name="review[comment]" rows="4" 
-                                  placeholder="Share your experience..." required></textarea>
+                                  placeholder="Share your experience with this property..." required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                    <button type="submit" class="btn btn-primary" id="submitReview">Submit Review</button>
                 </div>
             </form>
         </div>
@@ -281,32 +290,87 @@
         transform: translateX(5px);
     }
 
-    /* Fixed: Rating stars in modal - removed flex-direction: row-reverse */
-    .rating-stars {
-        display: flex;
-        justify-content: flex-start;
+    .star-rating-display {
+        display: inline-flex;
+        gap: 2px;
+        align-items: center;
     }
 
-    .rating-stars input {
+    /* COMPLETELY FIXED STAR RATING SYSTEM */
+    .rating-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .rating-stars {
+        display: flex;
+        gap: 4px;
+        position: relative;
+    }
+
+    .star-input {
         display: none;
     }
 
-    .rating-stars .star-label {
-        font-size: 2rem;
-        color: #ddd;
+    .star-label {
+        position: relative;
         cursor: pointer;
-        transition: color 0.2s;
-        margin-right: 5px;
+        font-size: 2.5rem;
+        color: #ddd;
+        transition: all 0.2s ease;
+        padding: 5px;
     }
 
-    .rating-stars input:checked ~ .star-label,
-    .rating-stars .star-label:hover,
-    .rating-stars .star-label:hover ~ .star-label {
-        color: #ffc107;
+    .star-label:hover {
+        transform: scale(1.1);
     }
 
-    .rating-stars input:checked + .star-label {
-        color: #ffc107;
+    .star-number {
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        font-weight: bold;
+        color: #6c757d;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .star-label:hover .star-number {
+        opacity: 1;
+    }
+
+    /* Highlight stars from left to right when checked */
+    .star-input:checked ~ .star-label .fa-star,
+    .star-label:hover .fa-star,
+    .star-label:hover ~ .star-label .fa-star {
+        color: #ddd !important;
+    }
+
+    .star-input:checked + .star-label .fa-star,
+    .star-label:hover .fa-star {
+        color: #ffc107 !important;
+    }
+
+    .star-input:checked + .star-label ~ .star-label .fa-star {
+        color: #ddd !important;
+    }
+
+    /* Keep stars yellow when a rating is selected */
+    .rating-stars:has(.star-input:checked) .star-label .fa-star {
+        color: #ffc107 !important;
+    }
+
+    .rating-stars:has(.star-input:checked) .star-input:checked ~ .star-label .fa-star {
+        color: #ddd !important;
+    }
+
+    /* Rating text styles */
+    .rating-text {
+        min-height: 20px;
     }
 
     /* Ensure consistent spacing */
@@ -336,23 +400,134 @@
             margin-top: 1rem !important;
         }
         
-        .rating-stars .star-label {
-            font-size: 1.5rem;
+        .star-label {
+            font-size: 2rem;
+        }
+        
+        .star-number {
+            font-size: 0.6rem;
+            top: -6px;
         }
     }
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<script>
-    // Star rating interaction
+ <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const stars = document.querySelectorAll('.rating-stars input');
-        stars.forEach(star => {
-            star.addEventListener('change', function() {
-                const rating = this.value;
-                console.log('Selected rating:', rating);
+        const starInputs = document.querySelectorAll('.star-input');
+        const starLabels = document.querySelectorAll('.star-label');
+        const ratingText = document.getElementById('ratingText');
+        const submitBtn = document.getElementById('submitReview');
+        const reviewForm = document.getElementById('reviewForm');
+        
+        const ratingMessages = {
+            1: "Poor - Very disappointed",
+            2: "Fair - Could be better", 
+            3: "Good - Met expectations",
+            4: "Very Good - Enjoyed the stay",
+            5: "Excellent - Outstanding experience"
+        };
+        
+        // Initialize all stars
+        starLabels.forEach(label => {
+            label.querySelector('.fa-star').className = 'far fa-star';
+        });
+        
+        // Star hover effect
+        starLabels.forEach((label, index) => {
+            const starNumber = index + 1;
+            
+            label.addEventListener('mouseenter', function() {
+                starLabels.forEach((l, i) => {
+                    const icon = l.querySelector('.fa-star');
+                    if (i <= index) {
+                        icon.className = 'fas fa-star';
+                        icon.style.color = '#ffc107';
+                    } else {
+                        icon.className = 'far fa-star';
+                        icon.style.color = '#ddd';
+                    }
+                });
+                
+                ratingText.textContent = ratingMessages[starNumber] || `Rating: ${starNumber}`;
+                ratingText.className = 'text-warning fw-bold';
+            });
+            
+            label.addEventListener('mouseleave', function() {
+                const checkedInput = document.querySelector('.star-input:checked');
+                
+                if (checkedInput) {
+                    const checkedValue = parseInt(checkedInput.value);
+                    // Restore to checked state
+                    starLabels.forEach((l, i) => {
+                        const icon = l.querySelector('.fa-star');
+                        if (i < checkedValue) {
+                            icon.className = 'fas fa-star';
+                            icon.style.color = '#ffc107';
+                        } else {
+                            icon.className = 'far fa-star';
+                            icon.style.color = '#ddd';
+                        }
+                    });
+                    ratingText.textContent = ratingMessages[checkedValue] || `Rating: ${checkedValue}`;
+                    ratingText.className = 'text-warning fw-bold';
+                } else {
+                    // Reset to empty state
+                    starLabels.forEach(l => {
+                        const icon = l.querySelector('.fa-star');
+                        icon.className = 'far fa-star';
+                        icon.style.color = '#ddd';
+                    });
+                    ratingText.textContent = 'Select your rating';
+                    ratingText.className = 'text-muted';
+                }
+            });
+            
+            // Click event
+            label.addEventListener('click', function() {
+                const starValue = starNumber;
+                
+                // Update all stars
+                starLabels.forEach((l, i) => {
+                    const icon = l.querySelector('.fa-star');
+                    if (i < starValue) {
+                        icon.className = 'fas fa-star';
+                        icon.style.color = '#ffc107';
+                    } else {
+                        icon.className = 'far fa-star';
+                        icon.style.color = '#ddd';
+                    }
+                });
+                
+                // Update rating text
+                ratingText.textContent = ratingMessages[starValue] || `Rating: ${starValue}`;
+                ratingText.className = 'text-warning fw-bold';
+                
+                // Enable submit button
+                submitBtn.disabled = false;
             });
         });
+        
+        // Form submission validation
+        reviewForm.addEventListener('submit', function(e) {
+            const checkedRating = document.querySelector('.star-input:checked');
+            const comment = document.getElementById('comment').value.trim();
+            
+            if (!checkedRating) {
+                e.preventDefault();
+                ratingText.textContent = 'Please select a rating';
+                ratingText.className = 'text-danger fw-bold';
+                return false;
+            }
+            
+            if (!comment) {
+                e.preventDefault();
+                alert('Please write a comment for your review');
+                return false;
+            }
+        });
+        
+        submitBtn.disabled = true;
     });
 </script>

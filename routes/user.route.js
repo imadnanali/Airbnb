@@ -7,24 +7,24 @@ import { saveRedirectUrl } from "../middleware.js"
 import { loginPage, loginUser, logoutUser, newUser, signupPage } from "../controllers/user.controller.js";
 
 //Signup page
-router.get("/signup", signupPage);
+router
+    .route("/signup")
+    .get(signupPage)
+    .post(wrapAsync(newUser));
 
-// SignUp
-router.post("/signup", wrapAsync(newUser));
 
 //login page
-router.get("/login", loginPage);
+router.route("/login")
+    .get(loginPage)
+    .post(saveRedirectUrl,
+        passport.authenticate("local",
+            {
+                failureRedirect: "/login",
+                failureFlash: true
+            }),
+        loginUser);
 
-//login
-router.post(
-    "/login",
-    saveRedirectUrl,
-    passport.authenticate("local",
-        {
-            failureRedirect: "/login",
-            failureFlash: true
-        }),
-    loginUser)
+
 
 
 //logout

@@ -118,21 +118,18 @@ app.use("/", userRouter);
 
 //Review 
 
-// app.use((req, res, next) => {
-//     next(new ExpressError(404, "Page Not Found"));
-// });
-
-// app.use((err, req, res, next) => {
-//     let { statusCode = 500, message = "Something went wrong!" } = err;
-//     res.status(statusCode).render("listings/error.ejs", {
-//         statusCode,
-//         message
-//     });
-// });
-
-app.get("/", (req, res) => {
-    res.send(`I'm root`);
+app.use((req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"));
 });
+
+app.use((err, req, res, next) => {
+    let { statusCode = 500, message = "Something went wrong!" } = err;
+    res.status(statusCode).render("listings/error.ejs", {
+        statusCode,
+        message
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`App is running at port ${port}`);

@@ -1,10 +1,39 @@
 import Listing from "../models/listing.schema.js";
 import ExpressError from "../utils/ExpressError.js";
 
-
 async function index(req, res) {
-    const allListings = await Listing.find({});
-    res.render("listings/index.ejs", { allListings });
+    try {
+        const listings = await Listing.find({}).populate('reviews');
+        
+        const listingsWithRatings = listings.map(listing => {
+            const listingObj = listing.toObject();
+            
+            // Safe rating calculation
+            if (listing.reviews && Array.isArray(listing.reviews) && listing.reviews.length > 0) {
+                const validReviews = listing.reviews.filter(review => 
+                    review && typeof review.rating === 'number' && !isNaN(review.rating)
+                );
+
+                if (validReviews.length > 0) {
+                    const totalRating = validReviews.reduce((sum, review) => sum + review.rating, 0);
+                    listingObj.averageRating = totalRating / validReviews.length;
+                    listingObj.reviewCount = validReviews.length;
+                } else {
+                    listingObj.averageRating = 0;
+                    listingObj.reviewCount = 0;
+                }
+            } else {
+                listingObj.averageRating = 0;
+                listingObj.reviewCount = 0;
+            }
+            return listingObj;
+        });
+        
+        res.render("listings/index.ejs", { allListings: listingsWithRatings });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
 }
 
 function newListing(req, res) {
@@ -75,4 +104,29 @@ async function deleteListing(req, res) {
     res.redirect("/listings");
 }
 
-export { index, newListing, createListing, showListing, editListing, updateListing, deleteListing };
+async function searchListing(req, res){
+    const { q } = req.query;
+    
+    if (!q || q.trim() === '') {
+        return res.redirect('/listings');
+    }
+
+    const searchRegex = new RegExp(q, 'i');
+    
+    const allListings = await Listing.find({
+        $or: [
+            { title: searchRegex },
+            { description: searchRegex },
+            { location: searchRegex },
+            { country: searchRegex }
+        ]
+    }).populate('reviews');
+
+    res.render("listings/index.ejs", { 
+        allListings, 
+        searchQuery: q,
+        searchResults: true 
+    });
+}
+
+export { index, newListing, createListing, showListing, editListing, updateListing, deleteListing, searchListing };
