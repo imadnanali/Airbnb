@@ -7,6 +7,7 @@ import methodOverride from "method-override";
 import ExpressError from "./utils/ExpressError.js";
 import dotenv from "dotenv";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import flash from "connect-flash";
 import passport from "passport"
 import LocalStrategy from "passport-local"
@@ -25,7 +26,8 @@ const port = process.env.PORT || 3000;
 
 
 const app = express();
-const MONGO_URL = "mongodb://127.0.0.1:27017/airbnb";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/airbnb";
+const dbURL = process.env.ATLASDB_URL;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,14 +48,27 @@ main().then(res => {
 });
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbURL);
 };
 
 
+const store = MongoStore.create({
+    mongoUrl: dbURL,
+    crypto: {
+        secret: process.env.SECRET,
+    },
 
+    touchAfter: 24 * 3600,
+});
+
+store.on("errpr", () => {
+    console.log("ERROR IN  MONGO STORE", err);
+
+})
 
 const sessionOption = {
-    secret: "mysupersecretcode",
+    store,
+    secret:  process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -63,12 +78,14 @@ const sessionOption = {
     }
 }
 
+
+
 app.use(session(sessionOption));
 app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));   
+passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -91,26 +108,26 @@ passport.deserializeUser(User.deserializeUser());
 // });
 
 app.use((req, res, next) => {
-  res.locals.currentPage = req.path; // gives you the URL like "/", "/listings", etc.
-  next();
+    res.locals.currentPage = req.path; // gives you the URL like "/", "/listings", etc.
+    next();
 });
 
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.curruser = req.user;
     next()
 })
 
-    // app.get("/demouser", async (req, res)=>{
-    //     let fakeUser = new User({
-    //         email: "student@gmail.com",
-    //         username: "delta-student"
-    //     })
-    //    let newUser = await User.register(fakeUser, "helloworld")
-    //    res.send(newUser)
-    
-    // })
+// app.get("/demouser", async (req, res)=>{
+//     let fakeUser = new User({
+//         email: "student@gmail.com",
+//         username: "delta-student"
+//     })
+//    let newUser = await User.register(fakeUser, "helloworld")
+//    res.send(newUser)
+
+// })
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
