@@ -291,7 +291,6 @@
         }
       });
 
-      // Focus search input on '/' key press
       document.addEventListener('keydown', function(e) {
         if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
           e.preventDefault();
